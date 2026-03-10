@@ -2,29 +2,31 @@ import sys
 
 class DynamicBillSplitter:
     def __init__(self):
-        # We use a dictionary to track net balances of anyone mentioned
         self.net_balances = {}
+        self.history = []  # Stores (payer, amount, consumers)
 
-    def add_bill(self, amount, payer, consumers):
-        # Ensure payer is in our tracking system
+    def add_bill(self, amount: float, payer: str, consumers: list[str]) -> None:
         if payer not in self.net_balances:
             self.net_balances[payer] = 0.0
-        
-        # Ensure all consumers are in our tracking system
         for person in consumers:
             if person not in self.net_balances:
                 self.net_balances[person] = 0.0
 
         split_amount = amount / len(consumers)
         self.net_balances[payer] += amount
-        
         for person in consumers:
             self.net_balances[person] -= split_amount
+        
+        # Save to history for the summary table
+        self.history.append({
+            "payer": payer,
+            "amount": amount,
+            "consumers": ", ".join(consumers)
+        })
 
-    def get_settlements(self):
+    def get_settlements(self) -> list[str]:
         debtors = []
         creditors = []
-
         for person, balance in self.net_balances.items():
             if balance < -0.01:
                 debtors.append([person, abs(balance)])
@@ -58,9 +60,9 @@ def main():
     """.strip().replace("⠀", " ")
 
     print(TOMATO_ART)
-    print("\n" + "="*40)
+    print("\n" + "="*45)
     print("      TOMATO BILL SPLITTER (DYNAMIC)")
-    print("="*40)
+    print("="*45)
     
     splitter = DynamicBillSplitter()
 
@@ -72,42 +74,44 @@ def main():
             amount = float(val)
 
             payer = input("Who paid?: ").strip()
-            if not payer: 
-                print("Error: Payer cannot be empty.")
-                continue
+            if not payer: continue
 
-            # Show currently known people for convenience
             known_people = list(splitter.net_balances.keys())
-            if payer not in known_people:
-                known_people.append(payer)
+            if payer not in known_people: known_people.append(payer)
             
-            print(f"Consumers (Current group: {', '.join(known_people)})")
-            print("  (Type names separated by space, or leave empty for EVERYONE above)")
-            
+            print(f"Consumers (Group: {', '.join(known_people)})")
             cons_input = input("> ").strip()
+            
             if not cons_input:
                 consumers = known_people
             else:
-                # Split by space or comma
                 consumers = [n.strip() for n in cons_input.replace(',', ' ').split() if n.strip()]
 
             splitter.add_bill(amount, payer, consumers)
             print(f"Recorded: {payer} paid {amount:.2f} for {', '.join(consumers)}")
 
         except ValueError:
-            print("Invalid amount. Please try again.")
+            print("Invalid amount.")
 
-    # Final Output
-    print("\n" + "═"*40)
+    # print History Table
+    if splitter.history:
+        print("\n" + "─"*45)
+        print(f"{'PAYER':<10} | {'AMOUNT':>8} | {'PARTICIPANTS'}")
+        print("─"*45)
+        for entry in splitter.history:
+            print(f"{entry['payer']:<10} | {entry['amount']:>8.2f} | {entry['consumers']}")
+    
+    # final Settlements Output
+    print("\n" + "════════════════════════════════════════")
     print("           FINAL SETTLEMENTS")
-    print("═"*40)
+    print("════════════════════════════════════════")
     results = splitter.get_settlements()
     if not results:
-        print(" No debts found. Everything is square!")
+        print(" Everything is square!")
     else:
         for line in results:
             print(f" 💸 {line}")
-    print("═"*40)
+    print("════════════════════════════════════════")
     print("Done! Have a great day!\n")
 
 if __name__ == "__main__":
