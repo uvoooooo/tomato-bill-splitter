@@ -39,6 +39,15 @@ uvicorn web_server:app --reload --host 127.0.0.1 --port 8000
 
 Open [http://127.0.0.1:8000](http://127.0.0.1:8000). The page stores a session id in `localStorage`; use **清空重来** to clear bills for that session. **下载 Excel** uses the same spreadsheet format as CLI option **5**.
 
+### Web UI sample
+**1.** Add a bill (amount, payer, split list) and view **Balances**.
+
+![Web UI: add a bill and view balances](assets/image.png)
+
+**2.** Review **Settlements** (who pays whom) and the **Bill history** table.
+
+![Web UI: settlement suggestions and bill history](assets/image2.png)
+
 ## How to use
 
 | Option | What it does |
@@ -54,3 +63,4 @@ Open [http://127.0.0.1:8000](http://127.0.0.1:8000). The page stores a session i
 - **Even splits only**: each bill’s total is divided equally across everyone listed as a consumer (including the payer if they’re in that list).
 - **Ctrl+C** can interrupt a prompt (e.g. while entering a bill); you’ll return to the main menu when safe.
 - After option **5**, run `python split_bill.py` again if you need another session.
+
