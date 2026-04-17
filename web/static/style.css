@@ -105,6 +105,17 @@ body {
   background: linear-gradient(180deg, #fdfcfa 0%, var(--surface) 100%);
 }
 
+.toolbar-sep {
+  color: var(--border-strong);
+  user-select: none;
+  padding: 0 0.15rem;
+}
+
+.btn-lang {
+  font-weight: 500;
+  min-width: 5.5rem;
+}
+
 .toolbar .dim {
   font-size: 0.75rem;
   letter-spacing: 0.04em;

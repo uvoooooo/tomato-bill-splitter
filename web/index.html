@@ -15,65 +15,68 @@
   <body>
     <div class="page">
       <header class="header">
-        <p class="eyebrow">Shared expenses</p>
-        <h1>Tomato Bill Splitter</h1>
-        <p class="tagline">均分记账，最少笔数结算</p>
+        <p class="eyebrow" data-i18n="eyebrow">Shared expenses</p>
+        <h1 data-i18n="appName">Tomato Bill Splitter</h1>
+        <p class="tagline" data-i18n="tagline">均分记账，最少笔数结算</p>
       </header>
 
       <p id="err" class="err" hidden></p>
 
       <section class="card toolbar">
-        <span class="dim">Session</span>
+        <button type="button" class="btn btn-ghost btn-lang" id="btn-lang" aria-label="Switch language">English</button>
+        <span class="dim toolbar-sep" aria-hidden="true">·</span>
+        <span class="dim" data-i18n="sessionLabel">Session</span>
         <code id="session-id" class="session-code"></code>
-        <button type="button" class="btn btn-ghost" id="btn-reset">清空重来</button>
-        <a class="btn btn-ghost" id="link-export" href="#">下载 Excel</a>
+        <button type="button" class="btn btn-ghost" id="btn-reset" data-i18n="reset">清空重来</button>
+        <a class="btn btn-ghost" id="link-export" href="#" data-i18n="exportExcel">下载 Excel</a>
       </section>
 
       <section class="card">
-        <h2>记一笔</h2>
+        <h2 data-i18n="addBill">记一笔</h2>
         <form id="form-bill" class="form-grid">
           <label>
-            金额
+            <span data-i18n="amountLabel">金额</span>
             <input name="amount" type="number" step="0.01" min="0.01" required placeholder="0.00" />
           </label>
           <label>
-            谁付的
-            <input name="payer" type="text" required placeholder="姓名" autocomplete="off" />
+            <span data-i18n="payerLabel">谁付的</span>
+            <input name="payer" type="text" required data-i18n-placeholder="payerPlaceholder" placeholder="姓名" autocomplete="off" />
           </label>
           <label class="span-2">
-            谁一起分摊（逗号或空格分隔，留空 = 当前所有人）
-            <input name="consumers" type="text" placeholder="例如：甲, 乙, 丙" autocomplete="off" />
+            <span data-i18n="consumersLabel">谁一起分摊（逗号或空格分隔，留空 = 当前所有人）</span>
+            <input
+              name="consumers"
+              type="text"
+              data-i18n-placeholder="consumersPlaceholder"
+              placeholder="例如：甲, 乙, 丙"
+              autocomplete="off"
+            />
           </label>
           <div class="form-actions span-2">
-            <button type="submit" class="btn btn-primary">添加</button>
+            <button type="submit" class="btn btn-primary" data-i18n="add">添加</button>
           </div>
         </form>
       </section>
 
       <div class="two-col">
         <section class="card">
-          <h2>当前余额</h2>
-          <div id="balances-wrap">
-            <p class="dim">暂无数据</p>
-          </div>
+          <h2 data-i18n="balancesTitle">当前余额</h2>
+          <div id="balances-wrap"></div>
         </section>
         <section class="card">
-          <h2>结算建议</h2>
-          <div id="settlements-wrap">
-            <p class="dim">添加账单后自动计算</p>
-          </div>
+          <h2 data-i18n="settlementsTitle">结算建议</h2>
+          <div id="settlements-wrap"></div>
         </section>
       </div>
 
       <section class="card">
-        <h2>账单记录</h2>
-        <div id="history-wrap">
-          <p class="dim">暂无记录</p>
-        </div>
+        <h2 data-i18n="historyTitle">账单记录</h2>
+        <div id="history-wrap"></div>
       </section>
 
       <footer class="footer">
-        <span>命令行版：<code>python split_bill.py</code></span>
+        <span data-i18n="footerCli">命令行版：</span>
+        <code>python split_bill.py</code>
       </footer>
     </div>
     <script src="/static/app.js"></script>
