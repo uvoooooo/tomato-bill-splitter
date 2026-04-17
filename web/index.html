@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Tomato Bill Splitter</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/static/style.css" />
+  </head>
+  <body>
+    <div class="page">
+      <header class="header">
+        <p class="eyebrow">Shared expenses</p>
+        <h1>Tomato Bill Splitter</h1>
+        <p class="tagline">均分记账，最少笔数结算</p>
+      </header>
+
+      <p id="err" class="err" hidden></p>
+
+      <section class="card toolbar">
+        <span class="dim">Session</span>
+        <code id="session-id" class="session-code"></code>
+        <button type="button" class="btn btn-ghost" id="btn-reset">清空重来</button>
+        <a class="btn btn-ghost" id="link-export" href="#">下载 Excel</a>
+      </section>
+
+      <section class="card">
+        <h2>记一笔</h2>
+        <form id="form-bill" class="form-grid">
+          <label>
+            金额
+            <input name="amount" type="number" step="0.01" min="0.01" required placeholder="0.00" />
+          </label>
+          <label>
+            谁付的
+            <input name="payer" type="text" required placeholder="姓名" autocomplete="off" />
+          </label>
+          <label class="span-2">
+            谁一起分摊（逗号或空格分隔，留空 = 当前所有人）
+            <input name="consumers" type="text" placeholder="例如：甲, 乙, 丙" autocomplete="off" />
+          </label>
+          <div class="form-actions span-2">
+            <button type="submit" class="btn btn-primary">添加</button>
+          </div>
+        </form>
+      </section>
+
+      <div class="two-col">
+        <section class="card">
+          <h2>当前余额</h2>
+          <div id="balances-wrap">
+            <p class="dim">暂无数据</p>
+          </div>
+        </section>
+        <section class="card">
+          <h2>结算建议</h2>
+          <div id="settlements-wrap">
+            <p class="dim">添加账单后自动计算</p>
+          </div>
+        </section>
+      </div>
+
+      <section class="card">
+        <h2>账单记录</h2>
+        <div id="history-wrap">
+          <p class="dim">暂无记录</p>
+        </div>
+      </section>
+
+      <footer class="footer">
+        <span>命令行版：<code>python split_bill.py</code></span>
+      </footer>
+    </div>
+    <script src="/static/app.js"></script>
+  </body>
+</html>

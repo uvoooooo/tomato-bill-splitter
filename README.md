@@ -9,7 +9,7 @@ Use it after meals, trips, or housemates’ shared bills: enter each expense as 
 ## Requirements
 
 - Python 3.10+ (recommended)
-- Dependencies listed in `requirements.txt` (currently [Rich](https://github.com/Textualize/rich) for the CLI UI)
+- Dependencies listed in `requirements.txt` ([Rich](https://github.com/Textualize/rich) for the CLI, [FastAPI](https://fastapi.tiangolo.com/) + [Uvicorn](https://www.uvicorn.org/) for the optional web UI, [openpyxl](https://openpyxl.readthedocs.io/) for Excel export)
 
 ## Installation
 
@@ -23,11 +23,21 @@ pip install -r requirements.txt
 
 ## How to run
 
+**Terminal (CLI):**
+
 ```bash
 python split_bill.py
 ```
 
 You’ll see a menu-driven interface in the terminal.
+
+**Web UI (browser):**
+
+```bash
+uvicorn web_server:app --reload --host 127.0.0.1 --port 8000
+```
+
+Open [http://127.0.0.1:8000](http://127.0.0.1:8000). The page stores a session id in `localStorage`; use **清空重来** to clear bills for that session. **下载 Excel** uses the same spreadsheet format as CLI option **5**.
 
 ## How to use
 

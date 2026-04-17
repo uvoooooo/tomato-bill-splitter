@@ -1,3 +1,7 @@
+from datetime import datetime
+from pathlib import Path
+
+from openpyxl import Workbook
 from rich.console import Console
 from rich.panel import Panel
 from rich.table import Table
@@ -256,7 +260,57 @@ def show_settlements(splitter: DynamicBillSplitter):
             padding=(1, 2),
         )
     )
+    out_path = write_session_output_file(splitter, results)
+    console.print(f"[dim]Session saved to:[/dim] [cyan]{out_path.resolve()}[/cyan]")
     console.print("[bold]Done! Have a great day![/bold]\n")
+
+
+def write_session_output_file(
+    splitter: DynamicBillSplitter,
+    settlements: list[tuple[str, str, float]],
+    path: Path | None = None,
+) -> Path:
+    stamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    if path is None:
+        path = Path(f"tomato_bill_session_{stamp}.xlsx")
+
+    wb = Workbook()
+    ws_bills = wb.active
+    ws_bills.title = "Bills"
+    ws_bills["A1"] = "Tomato Bill Splitter"
+    ws_bills["B1"] = f"Generated: {datetime.now().isoformat(timespec='seconds')}"
+
+    header_row = 3
+    for col, title in enumerate(["#", "Payer", "Amount", "Participants"], start=1):
+        ws_bills.cell(row=header_row, column=col, value=title)
+
+    data_row = header_row + 1
+    if not splitter.history:
+        ws_bills.cell(row=data_row, column=1, value="(no bills recorded)")
+    else:
+        for entry in splitter.history:
+            ws_bills.cell(row=data_row, column=1, value=entry["id"])
+            ws_bills.cell(row=data_row, column=2, value=entry["payer"])
+            ws_bills.cell(row=data_row, column=3, value=round(entry["amount"], 2))
+            ws_bills.cell(row=data_row, column=4, value=", ".join(entry["consumers"]))
+            data_row += 1
+
+    ws_settle = wb.create_sheet("Settlements")
+    ws_settle["A1"] = "From"
+    ws_settle["B1"] = "To"
+    ws_settle["C1"] = "Amount"
+    if not settlements:
+        ws_settle["A2"] = "Everything is square — no payments needed."
+    else:
+        r = 2
+        for debtor, creditor, amount in settlements:
+            ws_settle.cell(row=r, column=1, value=debtor)
+            ws_settle.cell(row=r, column=2, value=creditor)
+            ws_settle.cell(row=r, column=3, value=round(amount, 2))
+            r += 1
+
+    wb.save(path)
+    return path
 
 
 def main():
