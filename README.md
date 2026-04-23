@@ -1,5 +1,7 @@
 # Tomato Bill Splitter
 
+**English** | [简体中文](README.ch.md)
+
 A small **interactive terminal app** for splitting shared expenses in a group. When one person pays for something that benefits several people, you record who paid, how much, and who should share the cost. The tool tracks everyone’s net balance and, when you’re done, suggests **minimal person-to-person payments** so the group can settle up without unnecessary transfers.
 
 ## What it’s for
